@@ -1,5 +1,5 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
-#include <Append Calibrator>
+
 
 //This function will make plots of waveforms where the rising edge is matched up for each of the waves
 //A lot will be stolen from the procedure "PlotAllWaves-Simplified"

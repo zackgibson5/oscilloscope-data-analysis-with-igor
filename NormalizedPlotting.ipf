@@ -51,3 +51,24 @@ end
 Menu "Macros"
     "Normalize all waves in top graph", NormaliseAllTracesByMax()
 end
+
+//Function to remove all of the normalized waves
+//Will give error and not remove waves that are currently in use in plots
+Function KillNormWaves()
+
+	//Set the data folder, by default this is root:
+	//you can change to whatever folder you want
+	SetDataFolder root:
+	
+	String NormWaves = WaveList("*_n", ";", "")
+	
+	variable i = 0
+	for(i=0; i<ItemsInList(NormWaves, ";"); i +=1)
+		KillWaves $StringFromList(i, NormWaves, ";")
+	endfor
+	
+end
+
+Menu "Macros"
+	"Kill Normalized Waves", KillNormWaves()
+end

@@ -28,9 +28,20 @@ Function EasyPlot(searchstr, searchstrFFT, PlotTitlestr, PlotTitleFFTstr)
 	//Change this to whatever folder has the data you need
 	SetDataFolder root:
 	
+	//Makes a list of all waves using the indicated search string
 	String ListOfWaves = WaveList(searchstr,";","")
+	//Also makes list of FFT waves
 	String ListOfWaves_FFT = WaveList(searchstrFFT, ";", "")
+	//Removes FFTs from main list
 	ListOfWaves = RemoveFromList(ListOfWaves_FFT, ListOfWaves, ";")
+	
+	//Also want to remove any of the normalized plots from messing up the way the data is plotted
+	//Normalized waves are re-saved with an append "_n"
+	String ListOfWaves_normalized = WaveList("*_n", ";", "")
+	ListOfWaves = RemoveFromList(ListOfWaves_normalized, ListOfWaves, ";")
+	ListOfWaves_FFT = RemoveFromList(ListOfWaves_normalized, ListOfWaves_FFT, ";")
+	
+
 		
 	//This sorts the list alphanumerically, that way the waves I want to plot should be next to each other in the list
 	//The "16" parameter at the end indicates that the waves will be sorted to alpha-numeric list (caps insensitive)
@@ -40,7 +51,7 @@ Function EasyPlot(searchstr, searchstrFFT, PlotTitlestr, PlotTitleFFTstr)
 	//First you have to initialize the plot with the first wave
 	Display $StringFromList(0, ListOfWaves, ";") vs $StringFromList(1, ListOfWaves, ";") as PlotTitlestr
 	//This loop adds all the rest of the waves
-	for(i=0; i<ItemsInList(ListOfWaves); i+=2)	
+	for(i=2; i<ItemsInList(ListOfWaves); i+=2)	
 		AppendToGraph  $StringFromList(i, ListOfWaves, ";") vs $StringFromList(i+1, ListOfWaves, ";")	
 		//This part will (optionally, comment out if not desired) color each wave in the colors of the rainbow, equally spaced in the Igor color scheme "Rainbow"
 		colorindex = i * 100 / ItemsInList(ListOfWaves)
@@ -52,7 +63,7 @@ Function EasyPlot(searchstr, searchstrFFT, PlotTitlestr, PlotTitleFFTstr)
 	TextBox/X=39.5/Y=-7/F=0 "\\Z24" + PlotTitlestr
 	ModifyGraph nticks=10,minor=1;DelayUpdate
 	Label left "\\u#2 Amplitude (V 100:1)";DelayUpdate
-	Label bottom "2Time (s)"
+	Label bottom "Time (s)"
 	Legend/F=0/A=RT
 	
 	//Now to plot the FFTs
